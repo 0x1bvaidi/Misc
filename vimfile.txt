@@ -1,0 +1,125 @@
+set number
+set relativenumber
+set clipboard=unnameplus
+set autoindent
+set splitright
+
+set tabstop=4
+set shiftwidth=4
+set ignorecase        " Case-insensitive search
+set smartcase         " Case-sensitive search if uppercase is used
+set incsearch         " Incremental search (shows matches as you type)
+set hlsearch          " Highlight search results
+set cursorline
+" set showmatch         " highlight matching parentheses
+set wrap
+set linebreak
+set wrapmargin=2
+set scrolloff=10
+
+syntax enable
+filetype plugin indent on   " Enable filetype detection and plugins
+
+let mapleader = " "
+" the below for netrw(defualt vi fuzzy finder)
+nnoremap <Leader>pv :Ex<CR> 
+" Move a line of code up
+nnoremap <S-Up> :m .-2<CR>==
+" Move a line of code down
+nnoremap <S-Down> :m .+1<CR>==
+
+nnoremap <S-z> i // TODO: <Esc>a
+
+" the above settings are the required for my vim 
+" the next configuration below will be for plugins 
+
+call plug#begin('~/.vim/plugged')
+	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }  " Fuzzy finder
+	Plug 'junegunn/fzf.vim'                              " Fuzzy finder plugin for Vim
+	Plug 'itchyny/lightline.vim'              " Statusline plugin
+	Plug 'sheerun/vim-polyglot'
+	Plug 'jiangmiao/auto-pairs' 
+	Plug 'mattn/emmet-vim'  
+	Plug 'dense-analysis/ale'
+	Plug 'https://github.com/wolandark/vim-live-server.git'
+	Plug 'jnurmine/Zenburn' 							 " Zenburn colorscheme
+	Plug 'sjl/badwolf' 									 " Badwolf colorscheme
+	Plug 'morhetz/gruvbox'
+call plug#end()
+
+set background=dark
+colorscheme gruvbox
+" the below 5 lines helps to maintain the wallpaper of the girl
+highlight Normal     ctermbg=NONE guibg=NONE
+highlight NormalNC   ctermbg=NONE guibg=NONE
+highlight LineNr     ctermbg=NONE guibg=NONE
+highlight SignColumn ctermbg=NONE guibg=NONE
+highlight VertSplit  ctermbg=NONE guibg=NONE
+highlight CursorLine ctermbg=NONE guibg=NONE cterm=underline gui=underline
+
+" fuzzy finder keybiding
+nnoremap <Leader>f :FZF<CR> 
+" Enable lightline
+set laststatus=2
+let g:lightline = {
+			\ 'colorscheme': 'wombat',
+			\ 'active': {
+				\   'left': [ ['mode', 'paste'], ['filename', 'modified'] ],
+				\   'right': [ ['lineinfo'], ['percent'] ]
+				\ },
+				\ 'component_function': {
+					\   'filename': 'LightlineFilename'
+					\ }
+		\ }
+" emmet keybinding
+let g:user_emmet_mode= 'n'
+let g:user_emmet_leader_key=','
+
+" Enable linters for C and C++ using Clang
+ let g:ale_linters = {
+ \   'c': ['clang'],
+ \   'cpp': ['clang'],
+ \   'html': ['htmlhint'],     
+ \   'css': ['csslint'],       
+ \   'javascript': ['eslint'], 
+ \	 'go': ['gofmt'],
+ \	 'python': ['flake8'],
+ \}
+
+" Enable fixers for C and C++ using Clang-Format
+let g:ale_fixers = {
+			\   'c': ['clang-format'],
+			\   'cpp': ['clang-format'],
+			\   'html': ['prettier'],       
+			\   'css': ['prettier'],        
+			\   'javascript': ['prettier'], 
+			\	'go': ['gofmt'],
+			\	'python': ['black'],
+\}
+
+let g:LiveServerPort = 3000 " adjust the port number as needed
+nnoremap <Leader>ls :!bash /home/blue_dogstar/start_edge.sh<CR>    
+
+"below line make sure my current html file gets open not index.html always
+let cmd = "live-server --open=" . bufname() . "&"
+
+let g:fzf_action = {
+			\ 'enter': 'tabedit',
+			\}
+
+set showtabline=1
+let g:netrw_browse_split = 3
+let g:netrw_altv = 0
+let g:netrw_fastbrowse=1
+" the below two keybidings are for verticle split navigation created by netrw
+nnoremap <C-a> <C-w>h<CR>
+nnoremap <C-s> <C-w>l<CR>
+
+" these two keybinding are for navigating buffers builtupon each other thanks
+" to fzf. these are general keybinding not speciallized for fzf but it open as
+" new window.
+" i am making the same keybinding to avoid confusion.
+" I WILL BE USING FZF AS MUCH AS POSSIBLE.
+nnoremap <C-a> :bp<CR>
+nnoremap <C-s> :bn<CR>
+
